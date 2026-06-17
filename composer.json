@@ -1,0 +1,20 @@
+{
+  "name": "chargist/php_fetcher",
+  "description": "Charg.ist charge provider price fetcher",
+  "type": "project",
+  "license": "AGPL-3.0-only",
+  "autoload": {
+    "psr-4": {
+      "Chargist\\Fetcher\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Muhammed YAŞAR",
+      "email": "mamiysr@proton.me"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.11"
+  }
+}
