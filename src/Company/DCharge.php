@@ -10,6 +10,7 @@ class DCharge implements CompanyInterface
 {
     public string $title = "D-Charge";
     public string $priceUrl = "https://dcharge.com.tr/tarifeler";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

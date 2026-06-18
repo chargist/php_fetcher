@@ -10,6 +10,7 @@ class Otopriz implements CompanyInterface
 {
     public string $title = "otoPriz";
     public string $priceUrl = "https://otopriz.com.tr/uyelik-ve-tarifeler";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

@@ -10,6 +10,7 @@ class Lumicle implements CompanyInterface
 {
     public string $title = "Lumicle";
     public string $priceUrl = "https://lumicle.com.tr/";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

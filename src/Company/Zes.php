@@ -10,6 +10,7 @@ class Zes implements CompanyInterface
 {
     public string $title = "ZES";
     public string $priceUrl = "https://zes.net/tr/fiyatlandirma";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

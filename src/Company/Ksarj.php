@@ -10,6 +10,7 @@ class Ksarj implements CompanyInterface
 {
     public string $title = "Kşarj";
     public string $priceUrl = "https://ksarj.com/fiyatlandirma";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

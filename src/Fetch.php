@@ -2,9 +2,8 @@
 
 namespace Chargist\Fetcher;
 
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\{Client, Pool};
-use GuzzleHttp\Psr7\{Request, Response};
+use Raza\PHPImpersonate\{PHPImpersonate, ClientInterface};
+use Raza\PHPImpersonate\Exception\RequestException;
 
 class Fetch
 {
@@ -13,11 +12,10 @@ class Fetch
      * @param array<string, string> $headers
      */
     public function __construct(
-        protected Client $client = new Client(),
-        protected array $headers = [
-            "User-Agent" =>
-                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
-        ],
+        protected ClientInterface $client = new PHPImpersonate(
+            browser: "chrome136",
+            timeout: 4,
+        ),
     ) {
         return $this;
     }
@@ -31,37 +29,36 @@ class Fetch
     {
         $companyPrices = [];
         $failedCompanies = [];
+        $addFailed = function (CompanyInterface $company, string $reason) use (
+            $failedCompanies,
+        ): void {
+            $failedCompanies[] = [
+                "company" => $company->title,
+                "reason" => "Unsuccessful request : {$reason}",
+            ];
+        };
         $filteredCompanies = $this->filter_companies($companies);
 
-        $reqs = function () use ($filteredCompanies) {
-            foreach ($filteredCompanies as $company) {
-                yield new Request("GET", $company->priceUrl, $this->headers);
-            }
-        };
-
-        $pool = new Pool($this->client, $reqs(), [
-            "concurrency" => $cc,
-            "fulfilled" => function (Response $response, $index) use (
-                $filteredCompanies,
-                &$companyPrices,
-            ) {
-                $compData = $filteredCompanies[$index]->parseData(
-                    $response->getBody()->getContents(),
+        foreach ($filteredCompanies as $company) {
+            try {
+                $res = $this->client->sendGet(
+                    $company->priceUrl,
+                    $company->headers,
                 );
-                $companyPrices[] = $compData;
-            },
-            "rejected" => function (RequestException $reason, $index) use (
-                $filteredCompanies,
-                &$failedCompanies,
-            ) {
-                $failedCompanies[] = [
-                    "company" => $filteredCompanies[$index]->title,
-                    "reason" => $reason,
-                ];
-            },
-        ]);
-        $promise = $pool->promise();
-        $promise->wait();
+
+                if (!$res->isSuccess()) {
+                    $addFailed(
+                        $company,
+                        "Unsuccessful request : {$res->status()}",
+                    );
+                    continue;
+                }
+
+                $companyPrices[] = $company->parseData($res->body());
+            } catch (RequestException $e) {
+                $addFailed($company, "Failed request : {$e->getMessage()}");
+            }
+        }
 
         return [$companyPrices, $failedCompanies];
     }

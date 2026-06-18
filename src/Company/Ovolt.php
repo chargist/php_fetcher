@@ -10,6 +10,7 @@ class Ovolt implements CompanyInterface
 {
     public string $title = "ovolt";
     public string $priceUrl = "https://ovolt.com.tr/tarifeler";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

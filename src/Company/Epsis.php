@@ -10,6 +10,7 @@ class Epsis implements CompanyInterface
 {
     public string $title = "EPSIS";
     public string $priceUrl = "https://www.epsis.net/elektrikli-arac-sarj-tarifeleri";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

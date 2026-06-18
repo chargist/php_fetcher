@@ -10,6 +10,7 @@ class Voltrun implements CompanyInterface
 {
     public string $title = "Voltrun";
     public string $priceUrl = "https://www.voltrun.com/tr/tarifeler";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

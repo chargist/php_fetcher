@@ -10,6 +10,7 @@ class PowerSarj implements CompanyInterface
 {
     public string $title = "Powerşarj";
     public string $priceUrl = "https://powersarj.com/fiyatlandirma/";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

@@ -10,6 +10,7 @@ class Enyakit implements CompanyInterface
 {
     public string $title = "enyakit";
     public string $priceUrl = "https://www.enyakit.com.tr/ucretlendirme";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);

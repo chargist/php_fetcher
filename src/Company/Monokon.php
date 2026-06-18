@@ -10,6 +10,7 @@ class Monokon implements CompanyInterface
 {
     public string $title = "monokon";
     public string $priceUrl = "https://www.monokonev.com/Price";
+    public array $headers = [];
     public function parseData(string $htmlSource): CompanyPrice
     {
         $dom = HTMLDocument::createFromString($htmlSource);
