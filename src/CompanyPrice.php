@@ -2,6 +2,14 @@
 
 namespace Chargist\Fetcher;
 
+class CompanyPrice
+{
+    /**
+     * @param array<ChargePrice> $prices
+     */
+    public function __construct(public string $title, public array $prices) {}
+}
+
 enum ChargerType
 {
     case AC;
@@ -16,12 +24,4 @@ class ChargePrice
         public float $price,
         public string $currency,
     ) {}
-}
-
-class CompanyPrice
-{
-    /**
-     * @param array<ChargePrice> $prices
-     */
-    public function __construct(public string $title, public array $prices) {}
 }
